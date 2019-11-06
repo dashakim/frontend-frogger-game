@@ -5,7 +5,7 @@ var Enemy = function (x, y, speed) {
     this.x = x
     this.y = y
     this.speed = speed
-    this.sprite = 'images/enemy-bug.png';
+    this.sprite = 'images/car.png';
 };
 var END_CANVAS = 510
 var BEGIN_CANVAS = -50
