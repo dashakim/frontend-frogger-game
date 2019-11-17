@@ -1,5 +1,3 @@
-var gameScore = 0;
-
 const ENEMY = {
   speed: 100,
   varianceSpeed: 222,
@@ -63,16 +61,20 @@ Enemy.prototype.update = function(dt) {
 
 var Player = function(x, y) {
   Character.call(this, x, y);
+  this.score = 0;
   this.sprite = "images/char-cat-girl.png";
 };
+
 Player.prototype = Object.create(Character.prototype);
 Player.prototype.constructor = Player;
 Player.prototype.toRender = function() {
   this.render();
 };
+
 Player.prototype.update = function() {
   if (this.y <= 0) {
-    displayStats();
+    this.score++;
+    this.displayStats();
     this.goToStart();
   }
 };
@@ -94,10 +96,10 @@ Player.prototype.handleInput = function(keyUp) {
   }
 };
 
-var displayStats = function() {
-  gameScore++;
-  document.getElementById("currentStats").innerHTML = "Score: " + gameScore;
+Player.prototype.displayStats = function() {
+  document.getElementById("currentStats").innerHTML = "Score: " + this.score;
 };
+
 var player = new Player(PLAYER.startX, PLAYER.startY);
 var allEnemies = ENEMY.location.map(y => new Enemy(0, y, 200, player));
 
