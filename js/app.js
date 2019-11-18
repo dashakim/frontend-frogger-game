@@ -1,3 +1,5 @@
+var gameScore = 0;
+
 const ENEMY = {
   speed: 100,
   varianceSpeed: 222,
@@ -23,7 +25,7 @@ const CANVAS = {
 var Character = function(x, y, sprite) {
   this.x = x;
   this.y = y;
-  this.sprite = sprite
+  this.sprite = sprite;
 };
 Character.prototype.constructor = Character;
 Character.prototype.render = function() {
@@ -60,9 +62,9 @@ Enemy.prototype.update = function(dt) {
   }
 };
 
-var Player = function(x, y) {
+var Player = function(x, y, addScore) {
   Character.call(this, x, y);
-  this.score = 0;
+  this.addScore = addScore;
   this.sprite = "images/char-cat-girl.png";
 };
 
@@ -74,8 +76,7 @@ Player.prototype.toRender = function() {
 
 Player.prototype.update = function() {
   if (this.y <= 0) {
-    this.score++;
-    this.displayStats();
+    this.addScore();
     this.goToStart();
   }
 };
@@ -97,11 +98,20 @@ Player.prototype.handleInput = function(keyUp) {
   }
 };
 
-Player.prototype.displayStats = function() {
-  document.getElementById("currentStats").innerHTML = "Score: " + this.score;
+function addScoreBy() {
+  return function() {
+    return gameScore++;
+  };
+}
+var count = addScoreBy();
+
+var displayStats = function() {
+  count();
+  return (document.getElementById("currentStats").innerHTML =
+    "Score: " + gameScore);
 };
 
-var player = new Player(PLAYER.startX, PLAYER.startY);
+var player = new Player(PLAYER.startX, PLAYER.startY, displayStats);
 var allEnemies = ENEMY.location.map(y => new Enemy(0, y, 200, player));
 
 document.addEventListener("keyup", function(e) {
