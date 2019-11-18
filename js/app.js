@@ -20,9 +20,10 @@ const CANVAS = {
   halfCell: 50
 };
 
-var Character = function(x, y) {
+var Character = function(x, y, sprite) {
   this.x = x;
   this.y = y;
+  this.sprite = sprite
 };
 Character.prototype.constructor = Character;
 Character.prototype.render = function() {
@@ -50,12 +51,12 @@ Enemy.prototype.update = function(dt) {
   }
   // return to start position player when collide with enemy
   if (
-    player.x > this.x - CANVAS.halfCell &&
-    player.x < this.x + CANVAS.halfCell &&
-    player.y > this.y - CANVAS.halfCell &&
-    player.y < this.y + CANVAS.halfCell
+    this.player.x > this.x - CANVAS.halfCell &&
+    this.player.x < this.x + CANVAS.halfCell &&
+    this.player.y > this.y - CANVAS.halfCell &&
+    this.player.y < this.y + CANVAS.halfCell
   ) {
-    player.goToStart();
+    this.player.goToStart();
   }
 };
 
