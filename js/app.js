@@ -1,15 +1,19 @@
 var gameScore = 0;
 
 const ENEMY = {
+  startPos: 0,
+  startSpeed: 200,
   speed: 100,
   varianceSpeed: 222,
-  location: [70, 155, 235]
+  location: [70, 155, 235],
+  sprite: "images/car.png"
 };
 const PLAYER = {
   startX: 200,
   startY: 404,
   stepX: 101,
-  stepY: 83
+  stepY: 83,
+  sprite: "images/char-cat-girl.png"
 };
 
 const CANVAS = {
@@ -34,15 +38,12 @@ Character.prototype.render = function() {
 
 var Enemy = function(x, y, speed, player) {
   Character.call(this, x, y);
-  this.sprite = "images/car.png";
   this.speed = speed;
   this.player = player;
+  this.sprite = ENEMY.sprite
 };
 Enemy.prototype = Object.create(Character.prototype);
 Enemy.prototype.constructor = Enemy;
-Enemy.prototype.toRender = function() {
-  this.render();
-};
 
 Enemy.prototype.update = function(dt) {
   this.x += this.speed * dt;
@@ -65,17 +66,14 @@ Enemy.prototype.update = function(dt) {
 var Player = function(x, y, addScore) {
   Character.call(this, x, y);
   this.addScore = addScore;
-  this.sprite = "images/char-cat-girl.png";
+  this.sprite = PLAYER.sprite
 };
 
 Player.prototype = Object.create(Character.prototype);
 Player.prototype.constructor = Player;
-Player.prototype.toRender = function() {
-  this.render();
-};
 
 Player.prototype.update = function() {
-  if (this.y <= 0) {
+  if (this.y <= CANVAS.top) {
     this.addScore();
     this.goToStart();
   }
@@ -97,22 +95,19 @@ Player.prototype.handleInput = function(keyUp) {
     this.y = this.y + PLAYER.stepY;
   }
 };
-
-function addScoreBy() {
-  return function() {
-    return gameScore++;
-  };
+var addScore = function() {
+  return gameScore++
 }
-var count = addScoreBy();
-
 var displayStats = function() {
-  count();
+ addScore()
   return (document.getElementById("currentStats").innerHTML =
     "Score: " + gameScore);
 };
 
 var player = new Player(PLAYER.startX, PLAYER.startY, displayStats);
-var allEnemies = ENEMY.location.map(y => new Enemy(0, y, 200, player));
+var allEnemies = ENEMY.location.map(
+  y => new Enemy(ENEMY.startPos, y, ENEMY.startSpeed, player)
+);
 
 document.addEventListener("keyup", function(e) {
   var allowedKeys = {
