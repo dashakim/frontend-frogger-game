@@ -1,22 +1,20 @@
 var gameScore = 0;
 
-const ENEMY = {
+var ENEMY = {
   startPos: 0,
   startSpeed: 200,
   speed: 100,
   varianceSpeed: 222,
-  location: [70, 155, 235],
-  sprite: "images/car.png"
+  location: [70, 155, 235]
 };
-const PLAYER = {
+var PLAYER = {
   startX: 200,
   startY: 404,
   stepX: 101,
-  stepY: 83,
-  sprite: "images/char-cat-girl.png"
+  stepY: 83
 };
 
-const CANVAS = {
+var CANVAS = {
   begin: -60,
   end: 510,
   leftSide: 0,
@@ -38,9 +36,9 @@ Character.prototype.render = function() {
 
 var Enemy = function(x, y, speed, player) {
   Character.call(this, x, y);
+  this.sprite = "images/car.png";
   this.speed = speed;
   this.player = player;
-  this.sprite = ENEMY.sprite
 };
 Enemy.prototype = Object.create(Character.prototype);
 Enemy.prototype.constructor = Enemy;
@@ -63,10 +61,10 @@ Enemy.prototype.update = function(dt) {
   }
 };
 
-var Player = function(x, y, addScore) {
+var Player = function(x, y, displayStats) {
   Character.call(this, x, y);
-  this.addScore = addScore;
-  this.sprite = PLAYER.sprite
+  this.displayStats = displayStats;
+  this.sprite = "images/char-cat-girl.png";
 };
 
 Player.prototype = Object.create(Character.prototype);
@@ -74,7 +72,7 @@ Player.prototype.constructor = Player;
 
 Player.prototype.update = function() {
   if (this.y <= CANVAS.top) {
-    this.addScore();
+    this.displayStats();
     this.goToStart();
   }
 };
@@ -96,10 +94,10 @@ Player.prototype.handleInput = function(keyUp) {
   }
 };
 var addScore = function() {
-  return gameScore++
-}
+  gameScore++;
+};
 var displayStats = function() {
- addScore()
+  addScore();
   return (document.getElementById("currentStats").innerHTML =
     "Score: " + gameScore);
 };
